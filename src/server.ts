@@ -1,7 +1,11 @@
+import 'reflect-metadata';
+
 import express from 'express';
 import dotenv from 'dotenv';
 import colors from 'colors';
 import bodyParser from 'body-parser';
+
+import './database';
 
 // Import routes file
 import routes from './routes';
