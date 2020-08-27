@@ -3,18 +3,22 @@ import { getCustomRepository } from 'typeorm';
 import Appointment from '../models/Appointment';
 import AppointmentsRepository from '../repositories/AppointmentsRepository';
 
-interface RequestAppointmentCreationDTO {
-  provider: string;
+interface ServiceRequest {
+  providerId: string;
   date: Date;
 }
 
 class CreateAppointmentService {
   public async execute({
-    provider,
+    providerId,
     date,
-  }: RequestAppointmentCreationDTO): Promise<Appointment> {
+  }: ServiceRequest): Promise<Appointment> {
     const appointmentsRepository = getCustomRepository(AppointmentsRepository);
     const appointmentDate = startOfHour(date);
+
+    if (!providerId) {
+      throw new Error('No provider found with this ID');
+    }
 
     const findAppointmentInSameDate = await appointmentsRepository.findByDate(
       appointmentDate,
@@ -25,7 +29,7 @@ class CreateAppointmentService {
     }
 
     const appointment = appointmentsRepository.create({
-      provider,
+      providerId,
       date: appointmentDate,
     });
 

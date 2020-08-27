@@ -31,14 +31,14 @@ export const createAppointment = async (
   next: NextFunction,
 ): Promise<Response | void> => {
   try {
-    const { provider, date } = req.body;
+    const { providerId, date } = req.body;
 
     const parsedDate = parseISO(date);
 
     const createAppointmentService = new CreateAppointmentService();
 
     const appointment = await createAppointmentService.execute({
-      provider,
+      providerId,
       date: parsedDate,
     });
 
