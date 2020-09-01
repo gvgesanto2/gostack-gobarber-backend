@@ -7,8 +7,8 @@ import CreateAppointmentService from '../services/CreateAppointmentService';
 
 // @desc Get all appointments
 // @route GET /api/v1/appointments
-// @access Public
-export const getAppointment = async (
+// @access Private
+export const getAppointments = async (
   req: Request,
   res: Response,
   next: NextFunction,
@@ -24,7 +24,7 @@ export const getAppointment = async (
 
 // @desc Create a new appointment
 // @route POST /api/v1/appointments
-// @access Public
+// @access Private
 export const createAppointment = async (
   req: Request,
   res: Response,

@@ -1,5 +1,7 @@
 import 'reflect-metadata';
 
+import path from 'path';
+
 import express from 'express';
 import dotenv from 'dotenv';
 import colors from 'colors';
@@ -11,7 +13,7 @@ import './database';
 import routes from './routes';
 
 // Load env vars
-dotenv.config({ path: '../config/config.env ' });
+dotenv.config({ path: path.resolve(__dirname, 'config', 'config.env') });
 
 const app = express();
 

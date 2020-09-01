@@ -1,12 +1,16 @@
 import { Router } from 'express';
 
 import {
-  getAppointment,
+  getAppointments,
   createAppointment,
 } from '../controllers/appointment.controller';
 
+import requireAuth from '../middleware/requireAuth';
+
 const appointmentRouter = Router();
 
-appointmentRouter.route('/').get(getAppointment).post(createAppointment);
+appointmentRouter.use(requireAuth);
+
+appointmentRouter.route('/').get(getAppointments).post(createAppointment);
 
 export default appointmentRouter;

@@ -1,20 +1,37 @@
 import { Request, Response, NextFunction } from 'express';
 
-import CreateUserService from '../services/CreateUserService';
+import { getRepository } from 'typeorm';
 
-// @desc Create a new appointment
+import CreateUserService from '../services/CreateUserService';
+import User from '../models/User';
+
+// @desc Get all users
 // @route POST /api/v1/appointments
-// @access Public
-export const getUser = async (
+// @access Private (Admin)
+export const getUsers = async (
   req: Request,
   res: Response,
   next: NextFunction,
 ): Promise<Response | void> => {
-  console.log('');
+  try {
+    const usersRepository = getRepository(User);
+    const users = await usersRepository.find();
+
+    res.status(200).json({
+      success: true,
+      count: users.length,
+      data: users,
+    });
+  } catch (error) {
+    res.status(400).json({
+      success: false,
+      error: error.message,
+    });
+  }
 };
 
-// @desc Create a new appointment
-// @route POST /api/v1/appointments
+// @desc Register/Create a new user
+// @route POST /api/v1/users
 // @access Public
 export const createUser = async (
   req: Request,
