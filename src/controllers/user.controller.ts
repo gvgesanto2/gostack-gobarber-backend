@@ -4,9 +4,10 @@ import { getRepository } from 'typeorm';
 
 import CreateUserService from '../services/CreateUserService';
 import User from '../models/User';
+import UpdateUserAvatarService from '../services/UpdateUserAvatarService';
 
 // @desc Get all users
-// @route POST /api/v1/appointments
+// @route POST /api/v1/users
 // @access Private (Admin)
 export const getUsers = async (
   req: Request,
@@ -60,5 +61,32 @@ export const createUser = async (
       success: false,
       error: error.message,
     });
+  }
+};
+
+// @desc Register/Create a new user
+// @route PATCH /api/v1/users/avatar
+// @access Private
+export const updateAvatar = async (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+): Promise<Response | void> => {
+  try {
+    const updateUserAvatarService = new UpdateUserAvatarService();
+
+    const user = await updateUserAvatarService.execute({
+      userId: req.user.id,
+      avatarFilename: req.file.filename,
+    });
+
+    delete user.password;
+
+    res.status(200).json({
+      success: true,
+      data: user,
+    });
+  } catch (error) {
+    res.status(400).json({ error: error.message });
   }
 };

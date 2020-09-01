@@ -9,6 +9,8 @@ import bodyParser from 'body-parser';
 
 import './database';
 
+import uploadConfig from './config/upload.config';
+
 // Import routes file
 import routes from './routes';
 
@@ -19,6 +21,8 @@ const app = express();
 
 // Body Parser
 app.use(bodyParser.json());
+
+app.use('/files', express.static(uploadConfig.directory));
 
 // Mount routes
 app.use('/api/v1', routes);
