@@ -1,20 +1,17 @@
-import { Request, Response, NextFunction } from 'express';
+import { Response } from 'express';
 
 import { getRepository } from 'typeorm';
 
 import CreateUserService from '../services/CreateUserService';
 import User from '../models/User';
 import UpdateUserAvatarService from '../services/UpdateUserAvatarService';
+import asyncHandler from '../middleware/asyncHandler';
 
 // @desc Get all users
 // @route POST /api/v1/users
 // @access Private (Admin)
-export const getUsers = async (
-  req: Request,
-  res: Response,
-  next: NextFunction,
-): Promise<Response | void> => {
-  try {
+export const getUsers = asyncHandler(
+  async (req, res, _): Promise<Response | void> => {
     const usersRepository = getRepository(User);
     const users = await usersRepository.find();
 
@@ -23,23 +20,14 @@ export const getUsers = async (
       count: users.length,
       data: users,
     });
-  } catch (error) {
-    res.status(400).json({
-      success: false,
-      error: error.message,
-    });
-  }
-};
+  },
+);
 
 // @desc Register/Create a new user
 // @route POST /api/v1/users
 // @access Public
-export const createUser = async (
-  req: Request,
-  res: Response,
-  next: NextFunction,
-): Promise<Response | void> => {
-  try {
+export const createUser = asyncHandler(
+  async (req, res, _): Promise<Response | void> => {
     const { name, email, password } = req.body;
 
     const createUserService = new CreateUserService();
@@ -56,23 +44,14 @@ export const createUser = async (
       success: true,
       data: user,
     });
-  } catch (error) {
-    res.status(400).json({
-      success: false,
-      error: error.message,
-    });
-  }
-};
+  },
+);
 
 // @desc Register/Create a new user
 // @route PATCH /api/v1/users/avatar
 // @access Private
-export const updateAvatar = async (
-  req: Request,
-  res: Response,
-  next: NextFunction,
-): Promise<Response | void> => {
-  try {
+export const updateAvatar = asyncHandler(
+  async (req, res, _): Promise<Response | void> => {
     const updateUserAvatarService = new UpdateUserAvatarService();
 
     const user = await updateUserAvatarService.execute({
@@ -86,7 +65,5 @@ export const updateAvatar = async (
       success: true,
       data: user,
     });
-  } catch (error) {
-    res.status(400).json({ error: error.message });
-  }
-};
+  },
+);

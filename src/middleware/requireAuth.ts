@@ -1,6 +1,8 @@
 import { Request, Response, NextFunction } from 'express';
 import { verify } from 'jsonwebtoken';
 
+import ErrorResponse from '../errors/ErrorResponse';
+
 interface TokenPayload {
   iat: number;
   exp: number;
@@ -27,7 +29,7 @@ const requireAuth = (req: Request, res: Response, next: NextFunction): void => {
 
     return next();
   } catch (error) {
-    throw new Error('Not authorized to access this route');
+    throw new ErrorResponse('Not authorized to access this route', 401);
   }
 };
 

@@ -1,36 +1,31 @@
-import { Request, Response, NextFunction } from 'express';
+import { Response } from 'express';
 import { getCustomRepository } from 'typeorm';
 import { parseISO } from 'date-fns';
 
 import AppointmentsRepository from '../repositories/AppointmentsRepository';
 import CreateAppointmentService from '../services/CreateAppointmentService';
+import asyncHandler from '../middleware/asyncHandler';
 
 // @desc Get all appointments
 // @route GET /api/v1/appointments
 // @access Private
-export const getAppointments = async (
-  req: Request,
-  res: Response,
-  next: NextFunction,
-): Promise<Response | void> => {
-  const appointmentsRepository = getCustomRepository(AppointmentsRepository);
-  const appointments = await appointmentsRepository.find();
+export const getAppointments = asyncHandler(
+  async (req, res, _): Promise<Response | void> => {
+    const appointmentsRepository = getCustomRepository(AppointmentsRepository);
+    const appointments = await appointmentsRepository.find();
 
-  res.status(200).json({
-    success: true,
-    data: appointments,
-  });
-};
+    res.status(200).json({
+      success: true,
+      data: appointments,
+    });
+  },
+);
 
 // @desc Create a new appointment
 // @route POST /api/v1/appointments
 // @access Private
-export const createAppointment = async (
-  req: Request,
-  res: Response,
-  next: NextFunction,
-): Promise<Response | void> => {
-  try {
+export const createAppointment = asyncHandler(
+  async (req, res, _): Promise<Response | void> => {
     const { providerId, date } = req.body;
 
     const parsedDate = parseISO(date);
@@ -46,10 +41,5 @@ export const createAppointment = async (
       success: true,
       data: appointment,
     });
-  } catch (error) {
-    res.status(400).json({
-      success: false,
-      error: error.message,
-    });
-  }
-};
+  },
+);

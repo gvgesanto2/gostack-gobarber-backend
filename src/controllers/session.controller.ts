@@ -1,16 +1,13 @@
-import { Request, Response, NextFunction } from 'express';
+import { Response } from 'express';
 
 import AuthenticateUserService from '../services/AuthenticateUserService';
+import asyncHandler from '../middleware/asyncHandler';
 
 // @desc Create Session
 // @route POST /api/v1/sessions
 // @access Public
-export const createSession = async (
-  req: Request,
-  res: Response,
-  next: NextFunction,
-): Promise<Response | void> => {
-  try {
+export const createSession = asyncHandler(
+  async (req, res, _): Promise<Response | void> => {
     const { email, password } = req.body;
 
     const authenticateUserService = new AuthenticateUserService();
@@ -29,10 +26,5 @@ export const createSession = async (
         user,
       },
     });
-  } catch (error) {
-    res.status(400).json({
-      success: false,
-      error: error.message,
-    });
-  }
-};
+  },
+);

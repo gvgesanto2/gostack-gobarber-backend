@@ -10,6 +10,7 @@ import bodyParser from 'body-parser';
 import './database';
 
 import uploadConfig from './config/upload.config';
+import errorHandler from './middleware/errorHandler';
 
 // Import routes file
 import routes from './routes';
@@ -26,6 +27,8 @@ app.use('/files', express.static(uploadConfig.directory));
 
 // Mount routes
 app.use('/api/v1', routes);
+
+app.use(errorHandler);
 
 const PORT = process.env.PORT || 3333;
 const mode = process.env.NODE_ENV || 'development';

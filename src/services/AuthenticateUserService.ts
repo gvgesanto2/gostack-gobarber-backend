@@ -3,6 +3,7 @@ import { compare } from 'bcryptjs';
 import { sign } from 'jsonwebtoken';
 
 import User from '../models/User';
+import ErrorResponse from '../errors/ErrorResponse';
 
 interface ServiceRequest {
   email: string;
@@ -26,13 +27,13 @@ class AuthenticateUserService {
     });
 
     if (!user) {
-      throw new Error('Incorrect email/password combination.');
+      throw new ErrorResponse('Incorrect email/password combination.', 401);
     }
 
     const passwordMatched = await compare(password, user.password);
 
     if (!passwordMatched) {
-      throw new Error('Incorrect email/password combination.');
+      throw new ErrorResponse('Incorrect email/password combination.', 401);
     }
 
     const { JWT_SECRET, JWT_EXPIRES_IN } = process.env;
