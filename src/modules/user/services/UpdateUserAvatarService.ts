@@ -3,9 +3,9 @@ import fs from 'fs';
 
 import { getRepository } from 'typeorm';
 
-import User from '../models/User';
-import uploadConfig from '../config/upload.config';
-import ErrorResponse from '../errors/ErrorResponse';
+import uploadConfig from '@config/upload.config';
+import ErrorResponse from '@shared/errors/ErrorResponse';
+import User from '../infra/typeorm/entities/User';
 
 interface ServiceRequest {
   userId: string;

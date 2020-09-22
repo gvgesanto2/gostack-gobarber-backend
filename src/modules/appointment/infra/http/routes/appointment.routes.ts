@@ -1,11 +1,10 @@
 import { Router } from 'express';
 
+import requireAuth from '@modules/user/infra/http/middleware/requireAuth';
 import {
   getAppointments,
   createAppointment,
 } from '../controllers/appointment.controller';
-
-import requireAuth from '../middleware/requireAuth';
 
 const appointmentRouter = Router();
 

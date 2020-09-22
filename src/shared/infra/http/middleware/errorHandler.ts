@@ -1,7 +1,7 @@
 import { Request, Response, NextFunction } from 'express';
 import colors from 'colors';
 
-import ErrorResponse from '../errors/ErrorResponse';
+import ErrorResponse from '@shared/errors/ErrorResponse';
 
 const errorHandler = (
   err: Error,

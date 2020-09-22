@@ -7,9 +7,9 @@ import dotenv from 'dotenv';
 import colors from 'colors';
 import bodyParser from 'body-parser';
 
-import './database';
+import '../typeorm';
 
-import uploadConfig from './config/upload.config';
+import uploadConfig from '@config/upload.config';
 import errorHandler from './middleware/errorHandler';
 
 // Import routes file

@@ -2,8 +2,8 @@ import { getRepository } from 'typeorm';
 import { compare } from 'bcryptjs';
 import { sign } from 'jsonwebtoken';
 
-import User from '../models/User';
-import ErrorResponse from '../errors/ErrorResponse';
+import ErrorResponse from '@shared/errors/ErrorResponse';
+import User from '../infra/typeorm/entities/User';
 
 interface ServiceRequest {
   email: string;

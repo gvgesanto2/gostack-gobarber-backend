@@ -2,9 +2,9 @@ import { Response } from 'express';
 import { getCustomRepository } from 'typeorm';
 import { parseISO } from 'date-fns';
 
-import AppointmentsRepository from '../repositories/AppointmentsRepository';
-import CreateAppointmentService from '../services/CreateAppointmentService';
-import asyncHandler from '../middleware/asyncHandler';
+import AppointmentsRepository from '@modules/appointment/repositories/AppointmentsRepository';
+import CreateAppointmentService from '@modules/appointment/services/CreateAppointmentService';
+import asyncHandler from '@shared/infra/http/middleware/asyncHandler';
 
 // @desc Get all appointments
 // @route GET /api/v1/appointments

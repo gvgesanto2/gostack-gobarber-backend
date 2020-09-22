@@ -2,10 +2,10 @@ import { Response } from 'express';
 
 import { getRepository } from 'typeorm';
 
-import CreateUserService from '../services/CreateUserService';
-import User from '../models/User';
-import UpdateUserAvatarService from '../services/UpdateUserAvatarService';
-import asyncHandler from '../middleware/asyncHandler';
+import CreateUserService from '@modules/user/services/CreateUserService';
+import User from '@modules/user/infra/typeorm/entities/User';
+import UpdateUserAvatarService from '@modules/user/services/UpdateUserAvatarService';
+import asyncHandler from '@shared/infra/http/middleware/asyncHandler';
 
 // @desc Get all users
 // @route POST /api/v1/users
@@ -38,11 +38,14 @@ export const createUser = asyncHandler(
       password,
     });
 
-    delete user.password;
+    const userWithoutPassword = {
+      ...user,
+      password: undefined,
+    };
 
     res.status(200).json({
       success: true,
-      data: user,
+      data: userWithoutPassword,
     });
   },
 );
@@ -59,11 +62,14 @@ export const updateAvatar = asyncHandler(
       avatarFilename: req.file.filename,
     });
 
-    delete user.password;
+    const userWithoutPassword = {
+      ...user,
+      password: undefined,
+    };
 
     res.status(200).json({
       success: true,
-      data: user,
+      data: userWithoutPassword,
     });
   },
 );

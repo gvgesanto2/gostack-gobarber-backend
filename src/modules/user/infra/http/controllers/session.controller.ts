@@ -1,7 +1,7 @@
 import { Response } from 'express';
 
-import AuthenticateUserService from '../services/AuthenticateUserService';
-import asyncHandler from '../middleware/asyncHandler';
+import AuthenticateUserService from '@modules/user/services/AuthenticateUserService';
+import asyncHandler from '@shared/infra/http/middleware/asyncHandler';
 
 // @desc Create Session
 // @route POST /api/v1/sessions
@@ -17,13 +17,16 @@ export const createSession = asyncHandler(
       password,
     });
 
-    delete user.password;
+    const userWithoutPassword = {
+      ...user,
+      password: undefined,
+    };
 
     res.status(200).json({
       success: true,
       token,
       data: {
-        user,
+        user: userWithoutPassword,
       },
     });
   },
