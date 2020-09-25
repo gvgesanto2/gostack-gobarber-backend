@@ -1,10 +1,10 @@
 import { Request, Response, NextFunction } from 'express';
 
-interface AsyncMiddlewareFunction extends CallableFunction {
+interface IAsyncMiddlewareFunction extends CallableFunction {
   (req: Request, res: Response, next: NextFunction): Promise<Response | void>;
 }
 
-const asyncHandler = (fn: AsyncMiddlewareFunction) => (
+const asyncHandler = (fn: IAsyncMiddlewareFunction) => (
   req: Request,
   res: Response,
   next: NextFunction,

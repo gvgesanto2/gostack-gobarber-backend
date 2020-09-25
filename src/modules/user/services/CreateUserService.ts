@@ -1,26 +1,30 @@
-import { getRepository } from 'typeorm';
+/* eslint-disable prettier/prettier */
+import { inject, injectable } from 'tsyringe';
 import { hash } from 'bcryptjs';
 
 import ErrorResponse from '@shared/errors/ErrorResponse';
 import User from '../infra/typeorm/entities/User';
+import IUsersRepository from '../repositories/IUsersRepository';
 
-interface ServiceRequest {
+interface IServiceRequest {
   name: string;
   email: string;
   password: string;
 }
 
+@injectable()
 class CreateUserService {
+  constructor(
+    @inject('UsersRepository')
+    private usersRepository: IUsersRepository,
+  ) { }
+
   public async execute({
     name,
     email,
     password,
-  }: ServiceRequest): Promise<User> {
-    const usersRepository = getRepository(User);
-
-    const existingUser = await usersRepository.findOne({
-      where: { email },
-    });
+  }: IServiceRequest): Promise<User> {
+    const existingUser = await this.usersRepository.findByEmail(email);
 
     if (existingUser) {
       throw new ErrorResponse('This email address is already used.', 400);
@@ -28,13 +32,11 @@ class CreateUserService {
 
     const hashedPassword = await hash(password, 8);
 
-    const user = usersRepository.create({
+    const user = await this.usersRepository.createAndSave({
       name,
       email,
       password: hashedPassword,
     });
-
-    await usersRepository.save(user);
 
     return user;
   }

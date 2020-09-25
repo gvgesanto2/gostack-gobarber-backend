@@ -1,25 +1,31 @@
+/* eslint-disable prettier/prettier */
 import path from 'path';
 import fs from 'fs';
 
-import { getRepository } from 'typeorm';
+import { inject, injectable } from 'tsyringe';
 
 import uploadConfig from '@config/upload.config';
 import ErrorResponse from '@shared/errors/ErrorResponse';
 import User from '../infra/typeorm/entities/User';
+import IUsersRepository from '../repositories/IUsersRepository';
 
-interface ServiceRequest {
+interface IServiceRequest {
   userId: string;
   avatarFilename: string;
 }
 
+@injectable()
 class UpdateUserAvatarService {
+  constructor(
+    @inject('UsersRepository')
+    private usersRepository: IUsersRepository,
+  ) { }
+
   public async execute({
     userId,
     avatarFilename,
-  }: ServiceRequest): Promise<User> {
-    const usersRepository = getRepository(User);
-
-    const user = await usersRepository.findOne(userId);
+  }: IServiceRequest): Promise<User> {
+    const user = await this.usersRepository.findById(userId);
 
     if (!user) {
       throw new ErrorResponse(
@@ -39,7 +45,7 @@ class UpdateUserAvatarService {
 
     user.avatar = avatarFilename;
 
-    await usersRepository.save(user);
+    await this.usersRepository.save(user);
 
     return user;
   }

@@ -3,7 +3,7 @@ import { verify } from 'jsonwebtoken';
 
 import ErrorResponse from '@shared/errors/ErrorResponse';
 
-interface TokenPayload {
+interface ITokenPayload {
   iat: number;
   exp: number;
   sub: string;
@@ -21,7 +21,7 @@ const requireAuth = (req: Request, res: Response, next: NextFunction): void => {
   try {
     const decoded = verify(token, `${process.env.JWT_SECRET}`);
 
-    const { sub } = decoded as TokenPayload;
+    const { sub } = decoded as ITokenPayload;
 
     req.user = {
       id: sub,

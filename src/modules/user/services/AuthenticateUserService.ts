@@ -1,30 +1,34 @@
-import { getRepository } from 'typeorm';
+/* eslint-disable prettier/prettier */
+import { inject, injectable } from 'tsyringe';
 import { compare } from 'bcryptjs';
 import { sign } from 'jsonwebtoken';
 
 import ErrorResponse from '@shared/errors/ErrorResponse';
 import User from '../infra/typeorm/entities/User';
+import IUsersRepository from '../repositories/IUsersRepository';
 
-interface ServiceRequest {
+interface IServiceRequest {
   email: string;
   password: string;
 }
 
-interface ServiceResponse {
+interface IServiceResponse {
   user: User;
   token: string;
 }
 
+@injectable()
 class AuthenticateUserService {
+  constructor(
+    @inject('UsersRepository')
+    private usersRepository: IUsersRepository,
+  ) { }
+
   public async execute({
     email,
     password,
-  }: ServiceRequest): Promise<ServiceResponse> {
-    const usersRepository = getRepository(User);
-
-    const user = await usersRepository.findOne({
-      where: { email },
-    });
+  }: IServiceRequest): Promise<IServiceResponse> {
+    const user = await this.usersRepository.findByEmail(email);
 
     if (!user) {
       throw new ErrorResponse('Incorrect email/password combination.', 401);

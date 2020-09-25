@@ -7,7 +7,8 @@ import dotenv from 'dotenv';
 import colors from 'colors';
 import bodyParser from 'body-parser';
 
-import '../typeorm';
+import '@shared/infra/typeorm';
+import '@shared/container';
 
 import uploadConfig from '@config/upload.config';
 import errorHandler from './middleware/errorHandler';
@@ -16,7 +17,9 @@ import errorHandler from './middleware/errorHandler';
 import routes from './routes';
 
 // Load env vars
-dotenv.config({ path: path.resolve(__dirname, 'config', 'config.env') });
+dotenv.config({
+  path: path.resolve(__dirname, '..', '..', '..', 'config', 'config.env'),
+});
 
 const app = express();
 

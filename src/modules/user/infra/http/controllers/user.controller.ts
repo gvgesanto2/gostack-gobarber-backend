@@ -6,6 +6,7 @@ import CreateUserService from '@modules/user/services/CreateUserService';
 import User from '@modules/user/infra/typeorm/entities/User';
 import UpdateUserAvatarService from '@modules/user/services/UpdateUserAvatarService';
 import asyncHandler from '@shared/infra/http/middleware/asyncHandler';
+import { container } from 'tsyringe';
 
 // @desc Get all users
 // @route POST /api/v1/users
@@ -30,7 +31,7 @@ export const createUser = asyncHandler(
   async (req, res, _): Promise<Response | void> => {
     const { name, email, password } = req.body;
 
-    const createUserService = new CreateUserService();
+    const createUserService = container.resolve(CreateUserService);
 
     const user = await createUserService.execute({
       name,
@@ -55,7 +56,7 @@ export const createUser = asyncHandler(
 // @access Private
 export const updateAvatar = asyncHandler(
   async (req, res, _): Promise<Response | void> => {
-    const updateUserAvatarService = new UpdateUserAvatarService();
+    const updateUserAvatarService = container.resolve(UpdateUserAvatarService);
 
     const user = await updateUserAvatarService.execute({
       userId: req.user.id,
