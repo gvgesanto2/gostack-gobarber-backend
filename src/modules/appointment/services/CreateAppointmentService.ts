@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 import { inject, injectable } from 'tsyringe';
 import { startOfHour } from 'date-fns';
 
