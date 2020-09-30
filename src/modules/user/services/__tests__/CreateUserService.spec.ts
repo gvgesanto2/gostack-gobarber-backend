@@ -1,5 +1,5 @@
 import User from '@modules/user/infra/typeorm/entities/User';
-import FakeHashProvider from '@modules/user/providers/hash-provider/fakes/FakeHashProvider';
+import FakeCryptoProvider from '@modules/user/providers/crypto-provider/fakes/FakeCryptoProvider';
 import FakeUsersRepository from '@modules/user/repositories/fakes/FakeUsersRepository';
 import ErrorResponse from '@shared/errors/ErrorResponse';
 import CreateUserService from '../CreateUserService';
@@ -7,11 +7,11 @@ import CreateUserService from '../CreateUserService';
 describe('CreateUser', () => {
   it('should be able to create a new user', async () => {
     const fakeUsersRepository = new FakeUsersRepository();
-    const fakeHashProvider = new FakeHashProvider();
+    const fakeCryptoProvider = new FakeCryptoProvider();
 
     const createUserService = new CreateUserService(
       fakeUsersRepository,
-      fakeHashProvider,
+      fakeCryptoProvider,
     );
 
     const newUser = await createUserService.execute({
@@ -26,11 +26,11 @@ describe('CreateUser', () => {
 
   it('should not be able to create a new user with an existing email from another user', async () => {
     const fakeUsersRepository = new FakeUsersRepository();
-    const fakeHashProvider = new FakeHashProvider();
+    const fakeCryptoProvider = new FakeCryptoProvider();
 
     const createUserService = new CreateUserService(
       fakeUsersRepository,
-      fakeHashProvider,
+      fakeCryptoProvider,
     );
 
     const userEmail = 'johndoe@gmail.com';

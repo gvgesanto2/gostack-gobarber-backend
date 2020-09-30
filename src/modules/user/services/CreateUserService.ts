@@ -1,10 +1,9 @@
-/* eslint-disable prettier/prettier */
 import { inject, injectable } from 'tsyringe';
 
 import ErrorResponse from '@shared/errors/ErrorResponse';
 import User from '../infra/typeorm/entities/User';
 import IUsersRepository from '../repositories/models/IUsersRepository';
-import IHashProvider from '../providers/hash-provider/models/IHashProvider';
+import ICryptoProvider from '../providers/crypto-provider/models/ICryptoProvider';
 
 interface IServiceRequest {
   name: string;
@@ -18,8 +17,8 @@ class CreateUserService {
     @inject('UsersRepository')
     private usersRepository: IUsersRepository,
 
-    @inject('HashProvider')
-    private hashProvider: IHashProvider,
+    @inject('CryptoProvider')
+    private cryptoProvider: ICryptoProvider,
   ) { }
 
   public async execute({
@@ -33,7 +32,7 @@ class CreateUserService {
       throw new ErrorResponse('This email address is already used.', 400);
     }
 
-    const hashedPassword = await this.hashProvider.generateHash(password);
+    const hashedPassword = await this.cryptoProvider.encrypt(password);
 
     const user = await this.usersRepository.createAndSave({
       name,

@@ -4,7 +4,7 @@ import ErrorResponse from '@shared/errors/ErrorResponse';
 import User from '../infra/typeorm/entities/User';
 import IUsersRepository from '../repositories/models/IUsersRepository';
 import ITokenProvider from '../providers/token-provider/models/ITokenProvider';
-import IHashProvider from '../providers/hash-provider/models/IHashProvider';
+import ICryptoProvider from '../providers/crypto-provider/models/ICryptoProvider';
 
 interface IServiceRequest {
   email: string;
@@ -22,8 +22,8 @@ class AuthenticateUserService {
     @inject('UsersRepository')
     private usersRepository: IUsersRepository,
 
-    @inject('HashProvider')
-    private hashProvider: IHashProvider,
+    @inject('CryptoProvider')
+    private cryptoProvider: ICryptoProvider,
 
     @inject('TokenProvider')
     private tokenProvider: ITokenProvider,
@@ -39,9 +39,9 @@ class AuthenticateUserService {
       throw new ErrorResponse('Incorrect email/password combination.', 401);
     }
 
-    const passwordMatched = await this.hashProvider.compareHash({
-      payload: password,
-      hashed: user.password,
+    const passwordMatched = await this.cryptoProvider.compare({
+      plainText: password,
+      encrypted: user.password,
     });
 
     if (!passwordMatched) {

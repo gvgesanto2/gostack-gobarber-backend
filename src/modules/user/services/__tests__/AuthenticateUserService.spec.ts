@@ -1,4 +1,4 @@
-import FakeHashProvider from "@modules/user/providers/hash-provider/fakes/FakeHashProvider";
+import FakeCryptoProvider from "@modules/user/providers/crypto-provider/fakes/FakeCryptoProvider";
 import FakeTokenProvider from "@modules/user/providers/token-provider/fakes/FakeTokenProvider";
 import FakeUsersRepository from "@modules/user/repositories/fakes/FakeUsersRepository";
 import AuthenticateUserService from "../AuthenticateUserService";
@@ -7,17 +7,17 @@ import CreateUserService from "../CreateUserService";
 describe('AuthenticateUser', () => {
   it('should be able to authenticate the user', async () => {
     const fakeUsersRepository = new FakeUsersRepository();
-    const fakeHashProvider = new FakeHashProvider();
+    const fakeCryptoProvider = new FakeCryptoProvider();
     const fakeTokenProvider = new FakeTokenProvider();
 
     const createUserService = new CreateUserService(
       fakeUsersRepository,
-      fakeHashProvider
+      fakeCryptoProvider
     )
 
     const authenticaUserService = new AuthenticateUserService(
       fakeUsersRepository,
-      fakeHashProvider,
+      fakeCryptoProvider,
       fakeTokenProvider
     );
 

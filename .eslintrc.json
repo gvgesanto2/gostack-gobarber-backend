@@ -43,6 +43,7 @@
         "argsIgnorePattern": "_"
       }
     ],
+    "no-empty": "off",
     "prettier/prettier": "off",
     "import/extensions": [
       "error",
