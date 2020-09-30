@@ -1,7 +1,7 @@
 /* eslint-disable prettier/prettier */
 import { inject, injectable } from 'tsyringe';
 import Appointment from '../infra/typeorm/entities/Appointment';
-import IAppointmentsRepository from '../repositories/IAppointmentsRepository';
+import IAppointmentsRepository from '../repositories/models/IAppointmentsRepository';
 
 @injectable()
 class ListAppointmentsService {

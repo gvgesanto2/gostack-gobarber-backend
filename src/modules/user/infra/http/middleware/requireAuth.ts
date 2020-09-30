@@ -1,7 +1,7 @@
 import { Request, Response, NextFunction } from 'express';
-import { verify } from 'jsonwebtoken';
 
 import ErrorResponse from '@shared/errors/ErrorResponse';
+import ITokenProvider from '@modules/user/providers/token-provider/models/ITokenProvider';
 
 interface ITokenPayload {
   iat: number;
@@ -9,7 +9,7 @@ interface ITokenPayload {
   sub: string;
 }
 
-const requireAuth = (req: Request, res: Response, next: NextFunction): void => {
+const requireAuth = (tokenProvider: ITokenProvider) => (req: Request, res: Response, next: NextFunction): void => {
   const authHeader = req.headers.authorization;
 
   if (!authHeader || !authHeader.startsWith('Bearer')) {
@@ -19,7 +19,10 @@ const requireAuth = (req: Request, res: Response, next: NextFunction): void => {
   const [, token] = authHeader.split(' ');
 
   try {
-    const decoded = verify(token, `${process.env.JWT_SECRET}`);
+    const decoded = tokenProvider.verifyToken({
+      token,
+      secret: `${process.env.JWT_SECRET}`
+    });
 
     const { sub } = decoded as ITokenPayload;
 

@@ -1,12 +1,18 @@
+import { container, inject, injectable } from 'tsyringe';
 import { Response } from 'express';
-import { container } from 'tsyringe';
-import { parseISO } from 'date-fns';
 
 import CreateAppointmentService from '@modules/appointment/services/CreateAppointmentService';
 import asyncHandler from '@shared/infra/http/middleware/asyncHandler';
 import ListAppointmentsService from '@modules/appointment/services/ListAppointmentsService';
+import IDateManagementProvider from '@shared/providers/date-management-provider/models/IDateManagementProvider';
 
+@injectable()
 class AppointmentController {
+  constructor(
+    @inject('DateManagementProvider')
+    private dateManagementProvider: IDateManagementProvider,
+  ) { }
+
   // @desc Get all appointments
   // @route GET /api/v1/appointments
   // @access Private
@@ -32,7 +38,7 @@ class AppointmentController {
     async (req, res, _): Promise<Response | void> => {
       const { providerId, date } = req.body;
 
-      const parsedDate = parseISO(date);
+      const parsedDate = this.dateManagementProvider.parseISO(date);
 
       const createAppointmentService = container.resolve(
         CreateAppointmentService,

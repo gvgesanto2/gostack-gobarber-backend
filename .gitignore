@@ -2,6 +2,7 @@
 node_modules/
 src/config/config.env
 build/
+test-coverage/
 
 public/uploads/*
 !public/uploads/.gitkeep

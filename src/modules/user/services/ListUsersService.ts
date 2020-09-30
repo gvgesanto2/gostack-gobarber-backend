@@ -2,7 +2,7 @@
 import { inject, injectable } from 'tsyringe';
 
 import User from '../infra/typeorm/entities/User';
-import IUsersRepository from '../repositories/IUsersRepository';
+import IUsersRepository from '../repositories/models/IUsersRepository';
 
 @injectable()
 class ListAppointmentsService {

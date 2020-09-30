@@ -7,7 +7,7 @@ import { inject, injectable } from 'tsyringe';
 import uploadConfig from '@config/upload.config';
 import ErrorResponse from '@shared/errors/ErrorResponse';
 import User from '../infra/typeorm/entities/User';
-import IUsersRepository from '../repositories/IUsersRepository';
+import IUsersRepository from '../repositories/models/IUsersRepository';
 
 interface IServiceRequest {
   userId: string;

@@ -1,10 +1,10 @@
 /* eslint-disable prettier/prettier */
 import { inject, injectable } from 'tsyringe';
-import { startOfHour } from 'date-fns';
 
 import ErrorResponse from '@shared/errors/ErrorResponse';
+import IDateManagementProvider from '@shared/providers/date-management-provider/models/IDateManagementProvider';
 import Appointment from '../infra/typeorm/entities/Appointment';
-import IAppointmentsRepository from '../repositories/IAppointmentsRepository';
+import IAppointmentsRepository from '../repositories/models/IAppointmentsRepository';
 
 interface IServiceRequest {
   providerId: string;
@@ -16,13 +16,16 @@ class CreateAppointmentService {
   constructor(
     @inject('AppointmentsRepository')
     private appointmentsRepository: IAppointmentsRepository,
+
+    @inject('DateManagementProvider')
+    private dateManagementProvider: IDateManagementProvider
   ) { }
 
   public async execute({
     providerId,
     date,
   }: IServiceRequest): Promise<Appointment> {
-    const appointmentDate = startOfHour(date);
+    const appointmentDate = this.dateManagementProvider.startOfHour(date);
 
     if (!providerId) {
       throw new ErrorResponse('No provider found with this ID', 404);

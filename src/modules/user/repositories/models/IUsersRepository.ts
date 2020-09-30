@@ -1,5 +1,5 @@
-import ICreateUserDTO from '../dtos/ICreateUserDTO';
-import User from '../infra/typeorm/entities/User';
+import User from '@modules/user/infra/typeorm/entities/User';
+import ICreateUserDTO from '@modules/user/dtos/ICreateUserDTO';
 
 export default interface IUsersRepository {
   fetchAll(): Promise<User[]>;
