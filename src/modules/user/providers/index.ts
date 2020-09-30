@@ -1,2 +1,2 @@
-import './hash-provider';
+import './crypto-provider';
 import './token-provider';
