@@ -3,6 +3,7 @@ import { inject, injectable } from 'tsyringe';
 
 import ErrorResponse from '@shared/errors/ErrorResponse';
 import IDateManagementProvider from '@shared/providers/date-management-provider/models/IDateManagementProvider';
+import IUsersRepository from '@modules/user/repositories/models/IUsersRepository';
 import Appointment from '../infra/typeorm/entities/Appointment';
 import IAppointmentsRepository from '../repositories/models/IAppointmentsRepository';
 
@@ -17,6 +18,9 @@ class CreateAppointmentService {
     @inject('AppointmentsRepository')
     private appointmentsRepository: IAppointmentsRepository,
 
+    @inject('UsersRepository')
+    private usersRepository: IUsersRepository,
+
     @inject('DateManagementProvider')
     private dateManagementProvider: IDateManagementProvider
   ) { }
@@ -27,7 +31,9 @@ class CreateAppointmentService {
   }: IServiceRequest): Promise<Appointment> {
     const appointmentDate = this.dateManagementProvider.startOfHour(date);
 
-    if (!providerId) {
+    const provider = await this.usersRepository.findById(providerId);
+
+    if (!provider) {
       throw new ErrorResponse('No provider found with this ID', 404);
     }
 
